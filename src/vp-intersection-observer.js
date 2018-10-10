@@ -20,6 +20,7 @@ function supportsIntersectionObserver(){
 }
 
 class VPIntersectionObserver {
+  
   constructor({root, rootMargin, threshold, ...rest}){
     const opts = {
       root: root || null,
@@ -56,15 +57,27 @@ class VPIntersectionObserver {
     const { id, cb, target } = observer
     if(!id || !cb || !target) return
     if(!this.isFunction(cb)) throw new TypeError('the callback must be a function!')
-    this.observer.observe(observer.target)
+
+    if(!!~this.observers.findIndex(observer => observer.id === id)) return
+
+    this.observer.observe(target)
     this.observers.push(observer)
   }
 
-  off = (id, target) => {
+  off = id => {
+
+    // unobserve all target in queue
+    if(!id){
+      this.observers.forEach(({ target }) => {
+        this.observer.unobserve(target)
+      })
+      this.observers = []
+    }
+
     const idx = this.observers.findIndex(observer => observer.id === id)
     if(idx < 0) return
 
-    this.observers.splice(idx, 1)
+    const { target } = this.observers.splice(idx, 1)
     this.observer.unobserve(target)
 
     return this.observers
@@ -75,12 +88,10 @@ class VPIntersectionObserver {
   getCurrObserver = () => this.observer
 
   destory = () => {
-    if(!this.observer) return
-    this.observer.disconnect()
+    if(this.observer) this.observer.disconnect()
     this.observer = null
     this.observers = []
   }
-
 }
 
 export default VPIntersectionObserver
