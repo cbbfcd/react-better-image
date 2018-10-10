@@ -15,7 +15,9 @@ function supportsIntersectionObserver(){
   return (
     typeof window !== 'undefined' &&
     'IntersectionObserver' in window &&
-    'IntersectionObserverEntry' in window
+    'IntersectionObserverEntry' in window &&
+    'isIntersecting' in window.IntersectionObserverEntry.prototype &&
+    'intersectionRatio' in window.IntersectionObserverEntry.prototype
   )
 }
 
@@ -32,6 +34,7 @@ class VPIntersectionObserver {
     if(!this.observer){
       this.observer = new IntersectionObserver(this.handleEntries, opts)
     }
+    this.intersected = false
     this.observers = []
   }
 
@@ -41,22 +44,44 @@ class VPIntersectionObserver {
       
       // support IE 10 and under, dataset only works well for IE11
       const observedId = target.getAttribute('data-id')
-      if(isIntersecting || intersectionRatio > 0) this.emit(observedId)
-    })
-  }
 
-  emit = id => {
-    this.observers.forEach(observer => {
-      if(observer.id === id) {
-        observer.cb()
+      const isIntersected = isIntersecting || intersectionRatio > 0
+
+      // enter
+      if(!this.intersected && isIntersected) {
+        this.emitEnter(observedId, target)
+        this.intersected = true
+      }
+
+      // leave
+      if(this.intersected && !isIntersected){
+        this.emitLeave(observedId, target)
+        this.intersected = false
       }
     })
   }
 
+  emitEnter = (id, target) => {
+    this.observers.forEach(observer => {
+      if(observer.id === id) {
+        observer.enter(target)
+      }
+    })
+  }
+
+  emitLeave = (id, target) => {
+    this.observers.forEach(observer => {
+      if(observer.id === id) {
+        observer.leave(target)
+      }
+    })
+    this.off(id)
+  }
+
   on = (observer = {}) => {
-    const { id, cb, target } = observer
-    if(!id || !cb || !target) return
-    if(!this.isFunction(cb)) throw new TypeError('the callback must be a function!')
+    const { id, enter=() => {}, leave=() => {}, target } = observer
+    if(!id || !target) return
+    if(!this.isFunction(enter) || !this.isFunction(leave)) throw new TypeError('the enter or leave callbacks must be a function!')
 
     if(!!~this.observers.findIndex(observer => observer.id === id)) return
 
