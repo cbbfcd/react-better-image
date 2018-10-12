@@ -23,12 +23,12 @@ function supportsIntersectionObserver(){
 
 class VPIntersectionObserver {
   
-  constructor({root, rootMargin, threshold, ...rest}){
+  constructor(root = null, rootMargin = '50px 0px', threshold = 1.0, config = {}){
     const opts = {
-      root: root || null,
-      rootMargin: rootMargin || '50px 0px',
-      threshold: threshold || 1.0,
-      ...rest
+      root: root,
+      rootMargin: rootMargin,
+      threshold: threshold,
+      ...config
     }
 
     if(!this.observer){
@@ -103,6 +103,8 @@ class VPIntersectionObserver {
     if(idx < 0) return
 
     const { target } = this.observers.splice(idx, 1)
+    if(!target) return
+    
     this.observer.unobserve(target)
 
     return this.observers

@@ -2,4 +2,18 @@ body {
   margin: 0;
   padding: 0;
   font-family: sans-serif;
+  height: 100%;
+}
+
+.example-wrapper {
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+}
+
+.example-item {
+  width: 600px;
+  height: 450px;
+  background-color: aqua;
+  margin: 200px 0;
 }
