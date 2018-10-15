@@ -19,10 +19,10 @@ class BetterImage extends Component {
 
   componentDidMount() {
     const { id } = this.state
-    const { enter, leave, onlyEnter } = this.props
+    const { enter, leave, onlyEnter, observerOpts } = this.props
     const { target } = this
     
-    if(!this.observedTarget) this.observedTarget = new VPIntersectionObserver()
+    if(!this.observedTarget) this.observedTarget = new VPIntersectionObserver(observerOpts)
 
     this.observedTarget.on({
       id,
@@ -85,12 +85,18 @@ BetterImage.propTypes = {
   onload: PropTypes.func,
   enter: PropTypes.func,
   leave: PropTypes.func,
-  onlyEnter: PropTypes.bool
+  onlyEnter: PropTypes.bool,
+  observerOpts: PropTypes.object
 }
 
 BetterImage.defaultProps = {
   alt: '',
-  onlyEnter: true
+  onlyEnter: true,
+  observerOpts : {
+    root: null,
+    rootMargin: '-10px 0px',
+    threshold: 1.0
+  }
 }
 
 export default BetterImage

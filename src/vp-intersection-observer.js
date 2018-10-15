@@ -2,7 +2,7 @@ if(!supportsIntersectionObserver()){
   require('intersection-observer')
 }
 
-// or add some babel plugin use promise 👇
+// or add some babel plugins use promise & dynamic-import 👇
 // const loadPolyfills = () => {
 //   const polyfills = []
 //   if(!supportsIntersectionObserver()) polyfills.push(import('intersection-observer')) 
@@ -23,12 +23,12 @@ function supportsIntersectionObserver(){
 
 class VPIntersectionObserver {
   
-  constructor(root = null, rootMargin = '50px 0px', threshold = 1.0, config = {}){
+  constructor({root = null, rootMargin = '-10px 0px', threshold = 1.0, ...rest}){
     const opts = {
       root: root,
       rootMargin: rootMargin,
       threshold: threshold,
-      ...config
+      ...rest
     }
 
     if(!this.observer){

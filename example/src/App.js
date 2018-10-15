@@ -16,6 +16,7 @@ export default class App extends Component {
                 placeholder={item.placeholder}
                 alt={item.alt}
                 enter={() => console.log(item.alt)}
+                onload={() => console.log('onload')}
               />
             </div>
           ))
