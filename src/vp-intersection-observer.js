@@ -1,3 +1,5 @@
+import { isFunction } from './utils'
+
 if(!supportsIntersectionObserver()){
   require('intersection-observer')
 }
@@ -81,7 +83,7 @@ class VPIntersectionObserver {
   on = (observer = {}) => {
     const { id, enter=() => {}, leave=() => {}, target } = observer
     if(!id || !target) return
-    if(!this.isFunction(enter) || !this.isFunction(leave)) throw new TypeError('the enter or leave callbacks must be a function!')
+    if(!isFunction(enter) || !isFunction(leave)) throw new TypeError('the enter or leave callbacks must be a function!')
 
     if(!!~this.observers.findIndex(observer => observer.id === id)) return
 
@@ -109,8 +111,6 @@ class VPIntersectionObserver {
 
     return this.observers
   }
-
-  isFunction = fn => Object.prototype.toString.call(fn) === '[object Function]' 
 
   getCurrObserver = () => this.observer
 

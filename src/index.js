@@ -3,6 +3,7 @@ import VPIntersectionObserver from './vp-intersection-observer'
 import uuidv4 from 'uuid/v4'
 import styles from './styles.css'
 import PropTypes from 'prop-types'
+import { isFunction, isString } from './utils'
 
 class BetterImage extends Component {
 
@@ -66,7 +67,7 @@ class BetterImage extends Component {
   renderPlaceholder = () => {
     const { placeholder, alt } = this.props
 
-    if(this.isString(placeholder)) {
+    if(isString(placeholder)) {
       return (
         <img 
           src={ placeholder }
@@ -76,14 +77,12 @@ class BetterImage extends Component {
       )
     }
 
-    if(placeholder){
-      return <div>{ placeholder }</div>
+    if(placeholder && isFunction(placeholder)){
+      return <React.Fragment>{ placeholder() }</React.Fragment>
     }
 
     return null
   }
-
-  isString = target => Object.prototype.toString.call(target) === "[object String]"
 
   render(){
     const { id } = this.state
@@ -104,7 +103,6 @@ BetterImage.propTypes = {
   source: PropTypes.string.isRequired,
   placeholder: PropTypes.oneOfType([
     PropTypes.string,
-    PropTypes.element,
     PropTypes.func
   ]),
   alt: PropTypes.string,
