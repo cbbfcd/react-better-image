@@ -8,25 +8,34 @@
   background-size: 100% 100%;
 }
 
-.image {
+.baseLayout {
   position: absolute;
-  z-index: 2;
   top: 0;
-  right: 0;
   bottom: 0;
   left: 0;
+  right: 0;
+  display: block;
 
   width: 100%;
   height: 100%;
+}
 
+.image {
+  composes: baseLayout;
+
+  z-index: 2;
   opacity: 0;
-
   transition: opacity 1s ease-in;
+}
+
+.placeholder {
+  composes: baseLayout;
 }
 
 .imageFadeIn {
   opacity: 1;
 }
+
 
 
 

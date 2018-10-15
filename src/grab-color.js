@@ -1,7 +1,2 @@
-class GrabColor {
-  constructor(){
-    
-  }
-}
+'use strict'
 
-export default new GrabColor()

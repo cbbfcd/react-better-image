@@ -23,11 +23,11 @@ function supportsIntersectionObserver(){
 
 class VPIntersectionObserver {
   
-  constructor({root = null, rootMargin = '-10px 0px', threshold = 1.0, ...rest}){
+  constructor({root = null, rootMargin = '-10px 0px', threshold = [0.0, 1.0], ...rest}){
     const opts = {
-      root: root,
-      rootMargin: rootMargin,
-      threshold: threshold,
+      root,
+      rootMargin,
+      threshold,
       ...rest
     }
 
@@ -49,30 +49,30 @@ class VPIntersectionObserver {
 
       // enter
       if(!this.intersected && isIntersected) {
-        this.emitEnter(observedId, target)
         this.intersected = true
+        this.emitEnter(observedId)
       }
 
       // leave
       if(this.intersected && !isIntersected){
-        this.emitLeave(observedId, target)
         this.intersected = false
+        this.emitLeave(observedId)
       }
     })
   }
 
-  emitEnter = (id, target) => {
+  emitEnter = id => {
     this.observers.forEach(observer => {
       if(observer.id === id) {
-        observer.enter(target)
+        observer.enter()
       }
     })
   }
 
-  emitLeave = (id, target) => {
+  emitLeave = id => {
     this.observers.forEach(observer => {
       if(observer.id === id) {
-        observer.leave(target)
+        observer.leave()
       }
     })
     this.off(id)

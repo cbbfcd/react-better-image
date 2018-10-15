@@ -10,7 +10,6 @@ class BetterImage extends Component {
     super(props)
     this.state = {
       id: uuidv4(),
-      placeholderStyle: { backgroundImage: `url(${props.placeholder})` },
       imageStyle: ``,
       startLoad: false
     }
@@ -40,6 +39,7 @@ class BetterImage extends Component {
 
   componentWillUnmount(){
     if(this.observedTarget) this.observedTarget.destory()
+    if(this.target) this.target = null
     this.observedTarget = null
   }
 
@@ -63,15 +63,37 @@ class BetterImage extends Component {
     )
   }
 
+  renderPlaceholder = () => {
+    const { placeholder, alt } = this.props
+
+    if(this.isString(placeholder)) {
+      return (
+        <img 
+          src={ placeholder }
+          alt={ alt }
+          className={ styles.placeholder }
+        />
+      )
+    }
+
+    if(placeholder){
+      return <div>{ placeholder }</div>
+    }
+
+    return null
+  }
+
+  isString = target => Object.prototype.toString.call(target) === "[object String]"
+
   render(){
-    const { id, placeholderStyle } = this.state
+    const { id } = this.state
     return (
       <div
         ref={ currRef => this.target = currRef }
         data-id={ id }
         className={ styles.wrapper }
-        style={ placeholderStyle }
       >
+        { this.renderPlaceholder() }
         { this.renderImage() }
       </div>
     )
@@ -80,8 +102,12 @@ class BetterImage extends Component {
 
 BetterImage.propTypes = {
   source: PropTypes.string.isRequired,
-  placeholder: PropTypes.string.isRequired,
-  alt: PropTypes.string.isRequired,
+  placeholder: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.element,
+    PropTypes.func
+  ]),
+  alt: PropTypes.string,
   onload: PropTypes.func,
   enter: PropTypes.func,
   leave: PropTypes.func,
@@ -95,7 +121,7 @@ BetterImage.defaultProps = {
   observerOpts : {
     root: null,
     rootMargin: '-10px 0px',
-    threshold: 1.0
+    threshold: [0.0, 1.0]
   }
 }
 

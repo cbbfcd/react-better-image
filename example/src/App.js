@@ -15,8 +15,9 @@ export default class App extends Component {
                 source={item.source}
                 placeholder={item.placeholder}
                 alt={item.alt}
-                enter={() => console.log(item.alt)}
-                onload={() => console.log('onload')}
+                enter={() => console.log(`${item.alt}: then enter func is default be called, and you can cancel observed use off(id)`)}
+                onload={() => console.log(`${item.alt}: onload event func (hava a observed dom element as arguments)`)}
+                leave={() => console.log(`${item.alt}: if onlyEnter false, will print this message!`)}
               />
             </div>
           ))
