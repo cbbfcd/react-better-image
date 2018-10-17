@@ -12,6 +12,8 @@ npm install --save react-better-image
 
 ## Usage
 
+[demo](https://cbbfcd.github.io/react-better-image/)
+
 ```jsx
 import React, { Component } from 'react'
 
