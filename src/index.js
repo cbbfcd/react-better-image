@@ -3,7 +3,7 @@ import VPIntersectionObserver from './vp-intersection-observer'
 import uuidv4 from 'uuid/v4'
 import styles from './styles.css'
 import PropTypes from 'prop-types'
-import { isFunction, isString } from './utils'
+import { isFunction } from './utils'
 
 class BetterImage extends Component {
 
@@ -14,23 +14,23 @@ class BetterImage extends Component {
       imageStyle: ``,
       startLoad: false
     }
-    this.observedTarget = null
+    this.oberserver = null
   }
 
   componentDidMount() {
     const { id } = this.state
-    const { enter, leave, onlyEnter, observerOpts } = this.props
+    const { enter, leave, onlyEnter, root, rootMargin } = this.props
     const { target } = this
     
-    if(!this.observedTarget) this.observedTarget = new VPIntersectionObserver(observerOpts)
+    if(!this.oberserver) this.oberserver = new VPIntersectionObserver(root, rootMargin)
 
-    this.observedTarget.on({
+    this.oberserver.on({
       id,
       target,
       enter: (target) => {
         this.setState({startLoad: true})
         if(enter) enter(target)
-        if(onlyEnter) this.observedTarget.off(id)
+        if(onlyEnter) this.oberserver.off(id)
       },
       leave: (target) => {
         if(leave) leave(target)
@@ -39,9 +39,9 @@ class BetterImage extends Component {
   }
 
   componentWillUnmount(){
-    if(this.observedTarget) this.observedTarget.destory()
+    if(this.oberserver) this.oberserver.destory()
     if(this.target) this.target = null
-    this.observedTarget = null
+    this.oberserver = null
   }
 
   imgOnLoad = () => {
@@ -67,21 +67,21 @@ class BetterImage extends Component {
   renderPlaceholder = () => {
     const { placeholder, alt } = this.props
 
-    if(isString(placeholder)) {
-      return (
-        <img 
-          src={ placeholder }
-          alt={ alt }
-          className={ styles.placeholder }
-        />
-      )
-    }
-
     if(placeholder && isFunction(placeholder)){
       return <React.Fragment>{ placeholder() }</React.Fragment>
     }
 
-    return null
+    if(placeholder && React.isValidElement(placeholder)){
+      return <React.Fragment>{ placeholder }</React.Fragment>
+    }
+
+    return (
+      <img 
+        src={ placeholder }
+        alt={ alt }
+        className={ styles.placeholder }
+      />
+    )
   }
 
   render(){
@@ -103,24 +103,21 @@ BetterImage.propTypes = {
   source: PropTypes.string.isRequired,
   placeholder: PropTypes.oneOfType([
     PropTypes.string,
-    PropTypes.func
-  ]),
+    PropTypes.func,
+    PropTypes.element
+  ]).isRequired,
   alt: PropTypes.string,
   onload: PropTypes.func,
   enter: PropTypes.func,
   leave: PropTypes.func,
   onlyEnter: PropTypes.bool,
-  observerOpts: PropTypes.object
+  root: PropTypes.node,
+  rootMargin: PropTypes.string
 }
 
 BetterImage.defaultProps = {
   alt: '',
-  onlyEnter: true,
-  observerOpts : {
-    root: null,
-    rootMargin: '-10px 0px',
-    threshold: [0.0, 1.0]
-  }
+  onlyEnter: true
 }
 
 export default BetterImage

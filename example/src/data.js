@@ -1,5 +1,11 @@
 import React from 'react'
 
+class Demo extends React.Component{
+  render(){
+    return <div style={{ height: '100%', textAlign: 'center', backgroundColor: '#e1e1e1', paddingTop: '30%' }}>loading...</div>
+  }
+}
+
 export const data = [
   {
     source: 'http://lqip-react.surge.sh/img/child-and-rain.b7f3aab49b1139fa3b25a23cfbf22688.jpg',
@@ -25,5 +31,10 @@ export const data = [
     source: 'https://lqip-loader.firebaseapp.com/media/lamps.jpg',
     placeholder: () => <div style={{ height: '100%', textAlign: 'center', backgroundColor: '#e1e1e1', paddingTop: '30%' }}>custom loading component</div>,
     alt: 'image-05'
+  },
+  {
+    source: 'https://lqip-loader.firebaseapp.com/media/paper-ships.jpg',
+    placeholder: <Demo />,
+    alt: 'image-06'
   }
 ]

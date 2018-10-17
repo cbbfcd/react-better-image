@@ -15,16 +15,33 @@ npm install --save react-better-image
 ```jsx
 import React, { Component } from 'react'
 
-import MyComponent from 'react-better-image'
+import BetterImage from 'react-better-image'
 
 class Example extends Component {
   render () {
     return (
-      <MyComponent />
+      <BetterImage
+        source={'your source image url'}
+        placeholder={'a loading component or a thumbnail image url, also can be a func like () => <Loading/>'}
+        alt={'alt'}
+        onload={(CurrentDOMElement) => {'img onload event, the current dom element be observed as param'}}
+        enter={() => {'Image enters the viewable area'}}
+        leave={() => {'Image leaves the viewable area'}}
+        onlyEnter={false} // if true,will only emit the enter callback, leave function will not be called
+        root={'default null, your viewable area target dom element'}
+        rootMargin={'default "0px, 0px"'}
+      />
     )
   }
 }
 ```
+
+## More
+
+if you want to understand the implementation principle of this component. And the settings of root, rootMargin and other parameters.
+
+please refer to --> [intersection-observer](https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API).
+
 
 ## License
 

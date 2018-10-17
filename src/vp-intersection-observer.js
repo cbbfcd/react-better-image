@@ -14,28 +14,29 @@ if(!supportsIntersectionObserver()){
 // loadPolyfills.then(/*...*//)
 
 function supportsIntersectionObserver(){
+  let w = window
   return (
-    typeof window !== 'undefined' &&
-    'IntersectionObserver' in window &&
-    'IntersectionObserverEntry' in window &&
-    'isIntersecting' in window.IntersectionObserverEntry.prototype &&
-    'intersectionRatio' in window.IntersectionObserverEntry.prototype
+    typeof w !== 'undefined' &&
+    'IntersectionObserver' in w &&
+    'IntersectionObserverEntry' in w &&
+    'isIntersecting' in w.IntersectionObserverEntry.prototype &&
+    'intersectionRatio' in w.IntersectionObserverEntry.prototype
   )
 }
 
 class VPIntersectionObserver {
   
-  constructor({root = null, rootMargin = '-10px 0px', threshold = [0.0, 1.0], ...rest}){
+  constructor(root = null, rootMargin = '-10px 0px'){
     const opts = {
       root,
       rootMargin,
-      threshold,
-      ...rest
+      threshold: [ 0, Number.MIN_VALUE, 0.01 ]
     }
 
     if(!this.observer){
       this.observer = new IntersectionObserver(this.handleEntries, opts)
     }
+
     this.intersected = false
     this.observers = []
   }
@@ -43,12 +44,12 @@ class VPIntersectionObserver {
   handleEntries = (entries, observer) => {
     entries.forEach(entry => {
       const { isIntersecting, intersectionRatio, target } = entry
-      
+
       // support IE 10 and under, dataset only works well for IE11
       const observedId = target.getAttribute('data-id')
 
       const isIntersected = isIntersecting || intersectionRatio > 0
-
+      
       // enter
       if(!this.intersected && isIntersected) {
         this.intersected = true
