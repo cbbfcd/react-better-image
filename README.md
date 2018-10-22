@@ -38,6 +38,10 @@ class Example extends Component {
 }
 ```
 
+also you can use a webpack-loader like [progressive-img-loader](https://github.com/cbbfcd/progressive-img-loader),
+
+maybe you should look the [doc](https://github.com/cbbfcd/progressive-img-loader#coordinate)
+
 ## More
 
 if you want to understand the implementation principle of this component. And the settings of root, rootMargin and other parameters.
