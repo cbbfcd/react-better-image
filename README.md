@@ -2,7 +2,7 @@
 
 > A progressive image component with a better user experience.
 
-[![NPM](https://img.shields.io/npm/v/react-better-image.svg)](https://www.npmjs.com/package/react-better-image) [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
+[![NPM](https://img.shields.io/npm/v/react-better-image.svg)](https://www.npmjs.com/package/react-better-image) [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com) [![Greenkeeper badge](https://badges.greenkeeper.io/cbbfcd/react-better-image.svg)](https://greenkeeper.io/)
 
 ## Install
 
